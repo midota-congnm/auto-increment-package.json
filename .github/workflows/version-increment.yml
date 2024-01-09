@@ -11,6 +11,7 @@ jobs:
   check_release_label:
     runs-on: ubuntu-latest
     steps:
+      - uses: dessant/label-actions@v4
       - name: Check release label
         if: |
           !contains(github.event.pull_request.labels.*.name, 'release:patch') &&
