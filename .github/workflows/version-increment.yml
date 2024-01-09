@@ -34,7 +34,7 @@ jobs:
           echo "::set-output name=merge_commit_author::$COMMIT_AUTHOR"
       
       - name: Get merge commit user email
-        id: merge_commit
+        id: merge_commit_1
         run: |
           # Get the SHA of the merge commit
           MERGE_COMMIT_SHA=$(git log --merges --pretty=format:"%H" -n 1)
