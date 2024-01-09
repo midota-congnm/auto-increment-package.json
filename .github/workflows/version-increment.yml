@@ -27,8 +27,9 @@ jobs:
           npm version patch --no-git-tag-version
 
           # Commit and push the changes
-          git config user.name "hehe-test"
-          git config user.email "test@example.com"
+          # git config user.name "hehe-test"
+          # git config user.email "test@example.com"
           git add package.json
+          git commit --amend --author="miya <miyakawa@beeb.co.jp>"
           git commit -m "update release version"
           git push origin main
