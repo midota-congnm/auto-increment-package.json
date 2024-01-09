@@ -20,6 +20,30 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+      
+      - name: Get merge commit user name
+        id: merge_commit
+        run: |
+          # Get the SHA of the merge commit
+          MERGE_COMMIT_SHA=$(git log --merges --pretty=format:"%H" -n 1)
+
+          # Get the author of the merge commit using GitHub API
+          COMMIT_AUTHOR=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/$MERGE_COMMIT_SHA" | jq -r '.commit.author.name')
+
+          echo "::set-output name=merge_commit_author::$COMMIT_AUTHOR"
+      
+      - name: Get merge commit user email
+        id: merge_commit
+        run: |
+          # Get the SHA of the merge commit
+          MERGE_COMMIT_SHA=$(git log --merges --pretty=format:"%H" -n 1)
+
+          # Get the author's email of the merge commit using GitHub App access token
+          COMMIT_AUTHOR_EMAIL=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_APP_ACCESS_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/$MERGE_COMMIT_SHA" | jq -r '.commit.author.email')
+
+          echo "::set-output name=merge_commit_author_email::$COMMIT_AUTHOR_EMAIL"
 
       - name: Update version
         run: |
@@ -27,9 +51,8 @@ jobs:
           npm version patch --no-git-tag-version
 
           # Commit and push the changes
-          # git config user.name "hehe-test"
-          # git config user.email "test@example.com"
+          git config user.name "${{ steps.merge_commit.outputs.merge_commit_author }} (via GitHub Actions)"
+          git config user.email "${{ steps.merge_commit.outputs.merge_commit_author_email }}@users.noreply.github.com"
           git add package.json
-          git commit --amend --author="miya <miyakawa@beeb.co.jp>"
           git commit -m "update release version"
           git push origin main
