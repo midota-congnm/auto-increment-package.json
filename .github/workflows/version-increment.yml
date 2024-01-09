@@ -27,8 +27,8 @@ jobs:
           npm version patch --no-git-tag-version
 
           # Commit and push the changes
-          git config user.name "Your CI Bot Name"
-          git config user.email "your-ci-bot@example.com"
+          git config user.name "hehe-test"
+          git config user.email "test@example.com"
           git add package.json package-lock.json
-          git commit -m "Bump version [skip ci]"
+          git commit -m "update release version"
           git push origin main
