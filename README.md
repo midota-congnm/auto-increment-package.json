@@ -1,3 +1,3 @@
 # auto-increment-version-package.json
 
-### test 6
+### test 2
