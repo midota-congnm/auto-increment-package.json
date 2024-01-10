@@ -21,6 +21,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Get pull request information
+        id: pr_info
+        run: |
+          PR_NUMBER=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" | jq -r '.[0].number')
+
+          MERGE_USER=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER/merge" | jq -r '.merged_by.login')
+
+          echo "::set-output name=merge_user::$MERGE_USER"
+
+      - name: Display merge user
+        run: echo "The pull request was merged by ${{ steps.pr_info.outputs.merge_user }}"
+
       - name: Update version
         run: |
           # Increment the version (customize as needed)
@@ -29,7 +43,6 @@ jobs:
           # Commit and push the changes
           # git config user.name "$(git log -n 1 --pretty=format:%an)"
           # git config user.email "$(git log -n 1 --pretty=format:%ae)"
-          echo git log
           git config user.name "abc-abc-abc"
           git config user.email "abc-abc-abc@mail.com"
           git add package.json
