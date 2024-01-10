@@ -27,8 +27,10 @@ jobs:
           npm version patch --no-git-tag-version
 
           # Commit and push the changes
-          git config user.name "$(git log -n 1 --pretty=format:%an)"
-          git config user.email "$(git log -n 1 --pretty=format:%ae)"
+          # git config user.name "$(git log -n 1 --pretty=format:%an)"
+          # git config user.email "$(git log -n 1 --pretty=format:%ae)"
+          git config user.name "abc"
+          git config user.email "abc@mail.com"
           git add package.json
           git commit -m "update release version"
           git push origin main
