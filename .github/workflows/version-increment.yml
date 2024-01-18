@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   update-version:
     runs-on: ubuntu-latest
+    permissions: write-all
     defaults:
       run:
         working-directory: ./front
@@ -33,4 +35,4 @@ jobs:
           git config user.email "user-email@mail.com"
           git add package.json
           git commit -m "update package.json version"
-          git push origin main
+          git push origin $(echo $GITHUB_REF | cut -d'/' -f 3)
